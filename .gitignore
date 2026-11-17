@@ -51,6 +51,9 @@ application-local.yaml
 application-local.yml
 application-local.properties
 
+### Local exports ###
+issues.json
+
 ### OS ###
 .DS_Store
 Thumbs.db
