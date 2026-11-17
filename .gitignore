@@ -1,0 +1,56 @@
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+### Eclipse / STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+nbproject/private/
+nbbuild/
+nbdist/
+dist/
+.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Build output ###
+target/
+build/
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+.mvn/wrapper/maven-wrapper.jar
+.gradle/
+
+### Spring Initializr leftovers ###
+HELP.md
+
+### Logs & temp ###
+*.log
+logs/
+*.tmp
+*.swp
+
+### Local config & secrets ###
+.env
+.env.*
+!.env.example
+application-local.yaml
+application-local.yml
+application-local.properties
+
+### OS ###
+.DS_Store
+Thumbs.db
