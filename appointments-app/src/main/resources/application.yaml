@@ -9,4 +9,7 @@ spring:
         jdbc:
           time_zone: UTC
     open-in-view: false
+  flyway:
+    validate-migration-naming: true
+
 
