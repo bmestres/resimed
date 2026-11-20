@@ -29,14 +29,14 @@ class SecurityConfigTest {
 
     @ParameterizedTest
     @EnumSource(Role.class)
-    void responseShouldNotChallengeForBasicAuth(Role role) throws Exception {
+    void requestWithUserOfAnyRoleShouldBeForbidden(Role role) throws Exception {
         mockMvc.perform(get("/any/path").with(user("user").roles(role.name())))
                 .andExpect(status().isForbidden());
     }
 
     @Test
-    void requestWithNoBasicAuthChallengeShouldReturnAuthenticate() throws Exception {
-        mockMvc.perform(get("/ any/path"))
+    void responseShouldNotChallengeForBasicAuth() throws Exception {
+        mockMvc.perform(get("/any/path"))
                 .andExpect(header().doesNotExist("WWW-Authenticate"));
     }
 }
