@@ -1,0 +1,9 @@
+spring:
+  docker:
+    compose:
+      enabled: true
+
+logging:
+  level:
+    cat.itacademy.s05.appointmentsapp: debug
+    org.hibernate.SQL: debug
