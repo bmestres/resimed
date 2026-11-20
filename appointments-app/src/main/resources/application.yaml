@@ -1,6 +1,9 @@
 spring:
   application:
     name: appointments-app
+  docker:
+    compose:
+      enabled: false
   jpa:
     hibernate:
       ddl-auto: validate
