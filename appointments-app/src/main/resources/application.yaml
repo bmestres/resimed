@@ -1,3 +1,15 @@
 spring:
   application:
     name: appointments-app
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+  flyway:
+    validate-migration-naming: true
+
+
