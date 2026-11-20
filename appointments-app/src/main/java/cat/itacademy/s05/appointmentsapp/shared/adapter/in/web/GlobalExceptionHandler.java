@@ -16,21 +16,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler
     ProblemDetail handleAuthentication(AuthenticationException e) {
         return ProblemDetail.forStatusAndDetail(
                 HttpStatus.UNAUTHORIZED, "Authentication required"
         );
     }
 
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler
     ProblemDetail handleAccessDenied(AccessDeniedException e) {
         return ProblemDetail.forStatusAndDetail(
                 HttpStatus.FORBIDDEN, "Permission denied"
         );
     }
 
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler
     ProblemDetail handleUnexpected(Exception e) {
         log.error("Unexpected error", e);
         return ProblemDetail.forStatusAndDetail(
