@@ -7,9 +7,11 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -24,9 +26,15 @@ class SecurityConfigTest {
     private MockMvc mockMvc;
 
     @Test
-    void requestWithNoUserShouldBeForbidden() throws Exception {
+    void requestWithoutTokenShouldReturnUnauthorized() throws Exception {
         mockMvc.perform(get("/any/path"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void requestWithInvalidTokenShouldReturnUnauthorized() throws Exception {
+        mockMvc.perform(get("/any/path").header(HttpHeaders.AUTHORIZATION, "Bearer not-a-jwt"))
+                .andExpect(status().isUnauthorized());
     }
 
     @ParameterizedTest
@@ -37,8 +45,8 @@ class SecurityConfigTest {
     }
 
     @Test
-    void responseShouldNotChallengeForBasicAuth() throws Exception {
+    void responseShouldChallengeForBearerNotBasic() throws Exception {
         mockMvc.perform(get("/any/path"))
-                .andExpect(header().doesNotExist("WWW-Authenticate"));
+                .andExpect(header().string(HttpHeaders.WWW_AUTHENTICATE, startsWith("Bearer")));
     }
 }

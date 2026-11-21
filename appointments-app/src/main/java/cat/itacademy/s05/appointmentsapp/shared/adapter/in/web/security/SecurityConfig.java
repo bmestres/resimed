@@ -3,6 +3,7 @@ package cat.itacademy.s05.appointmentsapp.shared.adapter.in.web.security;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -20,11 +21,13 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf-> csrf.disable())
                 .formLogin(form-> form.disable())
                 .httpBasic(httpBasic-> httpBasic.disable())
-                .sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.anyRequest().denyAll())
+                .sessionManagement(sessionManagement-> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize-> authorize.anyRequest().denyAll())
+                .oauth2ResourceServer(oauth-> oauth.jwt(Customizer.withDefaults()))
                 .build();
     }
 
