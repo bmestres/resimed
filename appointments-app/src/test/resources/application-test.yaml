@@ -1,0 +1,4 @@
+resimed:
+  security:
+    jwt:
+      secret: dev-only-not-a-real-secret-0123456789

@@ -7,3 +7,8 @@ logging:
   level:
     cat.itacademy.s05.appointmentsapp: debug
     org.hibernate.SQL: debug
+
+resimed:
+  security:
+    jwt:
+      secret: dev-only-not-a-real-secret-0123456789
