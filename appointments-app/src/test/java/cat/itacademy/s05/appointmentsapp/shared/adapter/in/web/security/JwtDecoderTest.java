@@ -21,7 +21,7 @@ class JwtDecoderTest {
 
     @Test
     void validTokenShouldBeDecoded() {
-       String token = tokenSignedWith(FIRST_SECRET, Instant.now().plus(Duration.ofHours(1)));
+        String token = tokenSignedWith(FIRST_SECRET, Instant.now().plus(Duration.ofHours(1)));
 
         Jwt jwt = decoder.decode(token);
 
@@ -47,16 +47,16 @@ class JwtDecoderTest {
                 .hasMessageContaining("expired");
     }
 
-private static String tokenSignedWith(String secret, Instant expiration) {
-    SecretKeySpec key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-    NimbusJwtEncoder encoder = NimbusJwtEncoder.withSecretKey(key).build();
+    private static String tokenSignedWith(String secret, Instant expiration) {
+        SecretKeySpec key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        NimbusJwtEncoder encoder = NimbusJwtEncoder.withSecretKey(key).build();
 
-    JwtClaimsSet claims = JwtClaimsSet.builder()
-            .subject("user-id")
-            .claim("role", "STAFF")
-            .issuedAt(expiration.minus(Duration.ofHours(1)))
-            .expiresAt(expiration)
-            .build();
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .subject("user-id")
+                .claim("role", "STAFF")
+                .issuedAt(expiration.minus(Duration.ofHours(1)))
+                .expiresAt(expiration)
+                .build();
 
     JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
 
