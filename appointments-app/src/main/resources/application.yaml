@@ -15,4 +15,8 @@ spring:
   flyway:
     validate-migration-naming: true
 
+resimed:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
 
