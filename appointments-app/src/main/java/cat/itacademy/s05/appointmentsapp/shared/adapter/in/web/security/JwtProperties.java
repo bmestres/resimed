@@ -12,5 +12,4 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties("resimed.security.jwt")
 public record JwtProperties(
         @NotBlank @Size(min = 32) String secret
-) {
-}
+) { }
