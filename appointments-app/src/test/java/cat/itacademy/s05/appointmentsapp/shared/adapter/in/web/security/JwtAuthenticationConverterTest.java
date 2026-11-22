@@ -26,4 +26,20 @@ public class JwtAuthenticationConverterTest {
                 .filteredOn(auth-> auth.startsWith("ROLE_"))
                 .containsExactly("ROLE_STAFF");
     }
+
+    @Test
+    void tokenWithoutRoleShouldNotHaveRoleAuthorities() {
+        Jwt jwt = Jwt.withTokenValue("token")
+                .header("algorithm", "HS256")
+                .subject("user-id")
+                .claim("scope", "read")
+                .build();
+
+        AbstractAuthenticationToken authenticationToken = testConverter.convert(jwt);
+
+        assertThat(authenticationToken.getAuthorities())
+                .extracting(grantedAuthority-> grantedAuthority.getAuthority())
+                .filteredOn(auth-> auth.startsWith("ROLE_"))
+                .isEmpty();
+    }
 }
