@@ -7,14 +7,14 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JwtAuthenticationConverterTest {
+class JwtAuthenticationConverterTest {
 
     private final JwtAuthenticationConverter testConverter = new SecurityConfig().jwtAuthenticationConverter();
 
     @Test
     void roleClaimShouldMapToRoleAuthority() {
         Jwt jwt = Jwt.withTokenValue("token")
-                .header("algorithm", "HS256")
+                .header("alg", "HS256")
                 .subject("user-id")
                 .claim("role", "STAFF")
                 .build();
@@ -30,7 +30,7 @@ public class JwtAuthenticationConverterTest {
     @Test
     void tokenWithoutRoleShouldNotHaveRoleAuthorities() {
         Jwt jwt = Jwt.withTokenValue("token")
-                .header("algorithm", "HS256")
+                .header("alg", "HS256")
                 .subject("user-id")
                 .claim("scope", "read")
                 .build();
