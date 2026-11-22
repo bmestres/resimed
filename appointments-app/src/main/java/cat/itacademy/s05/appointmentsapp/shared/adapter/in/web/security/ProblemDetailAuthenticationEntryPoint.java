@@ -28,9 +28,9 @@ public class ProblemDetailAuthenticationEntryPoint implements AuthenticationEntr
                          AuthenticationException authException) throws IOException, ServletException {
         bearerTokenAuthenticationEntryPoint.commence(request, response, authException);
 
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Authentication required");
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, "Authentication required");
 
         response.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
-        jsonMapper.writeValue(response.getOutputStream(), problem);
+        jsonMapper.writeValue(response.getOutputStream(), problemDetail);
     }
 }
