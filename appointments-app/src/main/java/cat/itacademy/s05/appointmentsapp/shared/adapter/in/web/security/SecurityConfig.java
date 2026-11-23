@@ -34,7 +34,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter, JsonMapper jsonMapper) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                            JwtAuthenticationConverter jwtAuthenticationConverter,
+                                            JsonMapper jsonMapper) throws Exception {
 
         AuthenticationEntryPoint authenticationEntryPoint = new ProblemDetailAuthenticationEntryPoint(jsonMapper);
         AccessDeniedHandler accessDeniedHandler = new ProblemDetailAccessDeniedHandler(jsonMapper);
