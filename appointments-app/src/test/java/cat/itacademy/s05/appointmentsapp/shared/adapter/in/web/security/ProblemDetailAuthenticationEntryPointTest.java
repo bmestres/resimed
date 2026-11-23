@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -27,7 +27,7 @@ class ProblemDetailAuthenticationEntryPointTest {
         MockHttpServletRequest testRequest = new MockHttpServletRequest();
         MockHttpServletResponse testResponse = new MockHttpServletResponse();
 
-        authenticationEntryPoint.commence(testRequest, testResponse, new UsernameNotFoundException("message"));
+        authenticationEntryPoint.commence(testRequest, testResponse, new InsufficientAuthenticationException("message"));
 
         assertThat(testResponse.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
         assertThat(testResponse.getContentType()).isEqualTo(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
