@@ -8,14 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @WebMvcTest
 @Import(SecurityConfig.class)
@@ -48,5 +50,31 @@ class SecurityConfigTest {
     void responseShouldChallengeForBearerNotBasic() throws Exception {
         mockMvc.perform(get("/any/path"))
                 .andExpect(header().string(HttpHeaders.WWW_AUTHENTICATE, startsWith("Bearer")));
+    }
+
+    @Test
+    void unauthorizedResponseShouldBeProblemDetail() throws Exception {
+        mockMvc.perform(get("/any/path"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.status").value(401))
+                .andExpect(jsonPath("$.detail").value("Authentication required"));
+    }
+
+    @Test
+    void invalidTokenResponseShouldBeProblemDetail() throws Exception {
+        mockMvc.perform(get("/any/path").header(HttpHeaders.AUTHORIZATION, "Bearer false"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.detail").value("Authentication required"));
+    }
+
+    @Test
+    void forbiddenResponseShouldBeProblemDetail() throws Exception {
+        mockMvc.perform(get("/any/path").with(user("user").roles("STAFF")))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.status").value(403))
+                .andExpect(jsonPath("$.detail").value("Permission denied"));
     }
 }
