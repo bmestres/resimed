@@ -10,7 +10,10 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import tools.jackson.databind.json.JsonMapper;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +34,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                            JwtAuthenticationConverter jwtAuthenticationConverter,
+                                            JsonMapper jsonMapper) throws Exception {
+
+        AuthenticationEntryPoint authenticationEntryPoint = new ProblemDetailAuthenticationEntryPoint(jsonMapper);
+        AccessDeniedHandler accessDeniedHandler = new ProblemDetailAccessDeniedHandler(jsonMapper);
+
         return http
                 .csrf(csrf-> csrf.disable())
                 .formLogin(form-> form.disable())
@@ -40,6 +49,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize-> authorize.anyRequest().denyAll())
                 .oauth2ResourceServer(oauth-> oauth.
+                        authenticationEntryPoint(authenticationEntryPoint).
+                        accessDeniedHandler(accessDeniedHandler).
                         jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter)))
                 .build();
     }
