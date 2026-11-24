@@ -1,0 +1,1 @@
+package cat.itacademy.s05.appointmentsapp.ingestion.adapter.out.persistence;
