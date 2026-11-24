@@ -24,6 +24,7 @@ public class SecurityConfig {
 
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
+
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
         authoritiesConverter.setAuthoritiesClaimName("role");
         authoritiesConverter.setAuthorityPrefix("ROLE_");
@@ -60,7 +61,8 @@ public class SecurityConfig {
         SecretKeySpec key = new SecretKeySpec(
                 properties.secret().getBytes(StandardCharsets.UTF_8), "HmacSHA256"
         );
-        return NimbusJwtDecoder.withSecretKey(key)
+        return NimbusJwtDecoder
+                .withSecretKey(key)
                 .macAlgorithm(MacAlgorithm.HS256)
                 .build();
     }
